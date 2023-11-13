@@ -14,5 +14,6 @@ class ProjectReader:
         parsed_toml = toml.loads(content)
         dep = parsed_toml.get("tool").get("poetry").get("dependencies")
         dev_dep = parsed_toml.get("tool").get("poetry").get("group").get("dev").get("dependencies")
+        authors = parsed_toml.get("tool").get("poetry").get("authors")
         # deserialisoi TOML-formaatissa oleva merkkijono ja muodosta Project-olio sen tietojen perusteella
-        return Project(parsed_toml.get("tool").get("poetry").get("name"), parsed_toml.get("tool").get("poetry").get("description"), dep, dev_dep)
+        return Project(parsed_toml.get("tool").get("poetry").get("name"), parsed_toml.get("tool").get("poetry").get("description"), dep, dev_dep, parsed_toml.get("tool").get("poetry").get("license"), authors)
