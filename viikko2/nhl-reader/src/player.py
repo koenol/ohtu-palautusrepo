@@ -10,3 +10,4 @@ class Player:
         return (
             f"Player: {self.name:20}{self.team:5}{self.goals:2} + {self.assists:2} = {self.goals + self.assists}"
         )
+    
