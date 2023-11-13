@@ -1,0 +1,14 @@
+{
+    "folders": [
+		{
+			"path": "../../.."
+		},
+		{
+			"path": "../../poetry-web"
+		},
+		{
+			"path": "../../poetry-web/src"
+		}
+	],
+    "settings": {}
+}
