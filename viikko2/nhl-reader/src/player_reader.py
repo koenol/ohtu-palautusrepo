@@ -14,6 +14,3 @@ class PlayerReader:
             players.append(player)
 
         return players
-    
-    def __str__(self):
-        return f"Players from {self.players[0].nationality}"

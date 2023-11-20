@@ -2,6 +2,7 @@ from entities.user import User
 from repositories.user_repository import (
     user_repository as default_user_repository
 )
+import re
 
 
 class UserInputError(Exception):
@@ -40,7 +41,36 @@ class UserService:
         if not username or not password:
             raise UserInputError("Username and password are required")
 
-        # toteuta loput tarkastukset tänne ja nosta virhe virhetilanteissa
-
+        if len(username) >= 3: 
+                pass
+        else:
+            raise Exception(
+                f"Invalid username"
+            )
+        if re.match("^[a-z]+$", username):
+                pass
+        else:
+            raise Exception(
+                f"Invalid username"
+            )
+        if len(password) >= 8: 
+                pass
+        else:
+            raise Exception(
+                f"Invalid password"
+            )
+        if re.match("^(?=.*[^a-z])(?=.*\d)", password):
+                pass
+        else:
+            raise Exception(
+                f"Invalid password"
+            )
+        
+        if password == password_confirmation:
+             pass
+        else:
+             raise Exception(
+                  f"Passwords do not match"
+             )
 
 user_service = UserService()
