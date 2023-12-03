@@ -3,85 +3,86 @@ OLETUSKASVATUS = 5
 
 
 class IntJoukko:
-    # tämä metodi on ainoa tapa luoda listoja
+
     def _luo_lista(self, koko):
         return [0] * koko
     
     def __init__(self, kapasiteetti=None, kasvatuskoko=None):
-        if kapasiteetti is None:
-            self.kapasiteetti = KAPASITEETTI
-        elif not isinstance(kapasiteetti, int) or kapasiteetti < 0:
-            raise Exception("Väärä kapasiteetti")  # heitin vaan jotain :D
-        else:
-            self.kapasiteetti = kapasiteetti
-
-        if kasvatuskoko is None:
-            self.kasvatuskoko = OLETUSKASVATUS
-        elif not isinstance(kapasiteetti, int) or kapasiteetti < 0:
-            raise Exception("kapasiteetti2")  # heitin vaan jotain :D
-        else:
-            self.kasvatuskoko = kasvatuskoko
-
+        self.kapasiteetti = self.set_kapasiteetti(kapasiteetti)
+        self.kasvatuskoko = self.set_kasvatuskoko(kasvatuskoko)
         self.ljono = self._luo_lista(self.kapasiteetti)
-
         self.alkioiden_lkm = 0
 
-    def kuuluu(self, n):
-        on = 0
+    def set_kapasiteetti(self, kapasiteetti):
+        if kapasiteetti is None:
+            return KAPASITEETTI
+        elif not isinstance(kapasiteetti, int) or kapasiteetti < 0:
+            raise Exception("Väärä kapasiteetti")
+        else:
+            return kapasiteetti
+    
+    def set_kasvatuskoko(self, kasvatuskoko):
+        if kasvatuskoko is None:
+            return OLETUSKASVATUS
+        elif not isinstance(self.kapasiteetti, int) or self.kapasiteetti < 0:
+            raise Exception("kapasiteetti2")
+        else:
+            return kasvatuskoko
+
+    def kuuluu(self, alkio):
 
         for i in range(0, self.alkioiden_lkm):
-            if n == self.ljono[i]:
-                on = on + 1
+            if alkio == self.ljono[i]:
+                return True
+        return False
 
-        if on > 0:
-            return True
-        else:
-            return False
-
-    def lisaa(self, n):
-        ei_ole = 0
-
+    def _lisaa_ensimmainen_alkio_listaan(self, alkio):
         if self.alkioiden_lkm == 0:
-            self.ljono[0] = n
+            self.ljono[0] = alkio
             self.alkioiden_lkm = self.alkioiden_lkm + 1
             return True
         else:
             pass
-
-        if not self.kuuluu(n):
-            self.ljono[self.alkioiden_lkm] = n
-            self.alkioiden_lkm = self.alkioiden_lkm + 1
-
-            # ei mahdu enempää, luodaan uusi säilytyspaikka luvuille
-            if self.alkioiden_lkm % len(self.ljono) == 0:
-                taulukko_old = self.ljono
-                self.kopioi_lista(self.ljono, taulukko_old)
-                self.ljono = self._luo_lista(self.alkioiden_lkm + self.kasvatuskoko)
-                self.kopioi_lista(taulukko_old, self.ljono)
-
+    
+    def kasvata_listan_kokoa(self):
+        if self.alkioiden_lkm % len(self.ljono) == 0:
+            taulukko_old = self.ljono
+            self.kopioi_lista(self.ljono, taulukko_old)
+            self.ljono = self._luo_lista(self.alkioiden_lkm + self.kasvatuskoko)
+            self.kopioi_lista(taulukko_old, self.ljono)
             return True
-
         return False
 
-    def poista(self, n):
-        kohta = -1
-        apu = 0
+    def lisaa(self, alkio):
+        self._lisaa_ensimmainen_alkio_listaan(alkio)
 
-        for i in range(0, self.alkioiden_lkm):
-            if n == self.ljono[i]:
-                kohta = i  # siis luku löytyy tuosta kohdasta :D
-                self.ljono[kohta] = 0
-                break
+        if not self.kuuluu(alkio):
+            self.ljono[self.alkioiden_lkm] = alkio
+            self.alkioiden_lkm = self.alkioiden_lkm + 1
 
-        if kohta != -1:
-            for j in range(kohta, self.alkioiden_lkm - 1):
-                apu = self.ljono[j]
-                self.ljono[j] = self.ljono[j + 1]
-                self.ljono[j + 1] = apu
+        return self.kasvata_listan_kokoa()
 
-            self.alkioiden_lkm = self.alkioiden_lkm - 1
+    def _hae_alkio(self, alkio):
+        for x in range(self.alkioiden_lkm):
+            if alkio == self.ljono[x]:
+                return True
+        return False
+
+    def _hae_alkion_indeksi(self, alkio):
+        for x in range(self.alkioiden_lkm):
+            if alkio == self.ljono[x]:
+                return x
+
+    def _poista_alkio_indeksista(self, indeksi):
+        for y in range(indeksi, self.alkioiden_lkm - 1):
+            self.ljono[y] = self.ljono[y + 1]
+        self.alkioiden_lkm -= 1
+
+    def poista(self, alkio):
+        if self._hae_alkio(alkio):
+            indeksi = self._hae_alkion_indeksi(alkio)
+            self._poista_alkio_indeksista(indeksi)
             return True
-
         return False
 
     def kopioi_lista(self, a, b):
