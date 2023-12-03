@@ -17,7 +17,7 @@ class TennisGame:
         elif self.m_score1 >= 4 or self.m_score2 >= 4:
             return self._get_win_or_advantage()
         else:
-            return self._get_score()
+            return self._get_current_score()
 
     
     def _get_equal_score(self):
@@ -42,7 +42,7 @@ class TennisGame:
         else:
             return "Win for player2"
     
-    def _get_score(self):
+    def _get_current_score(self):
         temp_player1 = self._get_player_score(self.m_score1)
         temp_player2 = self._get_player_score(self.m_score2)
         score = f"{temp_player1}-{temp_player2}"
