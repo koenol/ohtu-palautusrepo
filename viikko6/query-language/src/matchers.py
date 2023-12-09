@@ -1,4 +1,11 @@
-class And:
+from player import Player
+
+
+class Matcher:
+    def __init__(self):
+        pass
+
+class And(Matcher):
     def __init__(self, *matchers):
         self._matchers = matchers
 
@@ -8,17 +15,15 @@ class And:
                 return False
 
         return True
-
-
-class PlaysIn:
+    
+class PlaysIn(Matcher):
     def __init__(self, team):
         self._team = team
 
     def test(self, player):
         return player.team == self._team
 
-
-class HasAtLeast:
+class HasAtLeast(Matcher):
     def __init__(self, value, attr):
         self._value = value
         self._attr = attr
@@ -28,18 +33,18 @@ class HasAtLeast:
 
         return player_value >= self._value
     
-class All:
+class All(Matcher):
     def test(self, player):
         return True
 
-class Not:
+class Not(Matcher):
     def __init__(self, value):
         self._value = value
 
     def test(self, player):
         return not self._value.test(player)
 
-class HasFewerThan:
+class HasFewerThan(Matcher):
     def __init__(self, value, attr):
         self._value = value
         self._attr = attr
@@ -48,7 +53,7 @@ class HasFewerThan:
         player_value = getattr(player, self._attr)
         return player_value < self._value
 
-class Or:
+class Or(Matcher):
     def __init__(self, *value):
         self._value = value
 
